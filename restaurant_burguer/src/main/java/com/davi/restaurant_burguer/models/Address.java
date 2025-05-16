@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 
+@Entity
 @Table(name = "address")
 public class Address {
     @Id

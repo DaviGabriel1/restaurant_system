@@ -7,14 +7,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-
+@Entity
 @Table(name = "order")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(nullable = false, unique = true)
     private String uuid;
 
     @JoinColumn(name = "user_id")

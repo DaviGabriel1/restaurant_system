@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 
+@Entity
 @Table(name = "product_img")
 public class ProductImage {
     @Id

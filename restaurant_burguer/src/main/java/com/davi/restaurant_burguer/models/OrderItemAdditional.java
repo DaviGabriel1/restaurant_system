@@ -2,6 +2,7 @@ package com.davi.restaurant_burguer.models;
 
 import jakarta.persistence.*;
 
+@Entity
 @Table(name = "order_item_additional")
 public class OrderItemAdditional {
     @Id

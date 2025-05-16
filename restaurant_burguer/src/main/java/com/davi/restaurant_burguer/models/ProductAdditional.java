@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+@Entity
 @Table(name = "product_additional")
 public class ProductAdditional {
     @Id
