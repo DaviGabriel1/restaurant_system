@@ -12,4 +12,14 @@ public enum Role {
     public int getId() {
         return id;
     }
+
+    public static Role fromByte(int value) {
+        for (Role role : Role.values()) {
+            if (role.id == value) {
+                return role;
+            }
+        }
+        throw new IllegalArgumentException("Role inválido: " + value);
+    }
+
 }

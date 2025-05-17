@@ -1,18 +1,26 @@
 package com.davi.restaurant_burguer.models;
 
+import com.davi.restaurant_burguer.enums.Role;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class Users {
+public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @UuidGenerator
     @Column(nullable = false, unique = true)
     private String uuid;
 
@@ -29,10 +37,10 @@ public class Users {
     private String password;
 
     @Column
-    private byte role;
+    private int role;
 
     @Column
-    private byte provider;
+    private int provider;
 
     @Column(name = "terms_accepted_at")
     private OffsetDateTime termsAcceptedAt;
@@ -52,6 +60,18 @@ public class Users {
     private OffsetDateTime deletedAt;
 
     public Users() {
+        this.uuid = java.util.UUID.randomUUID().toString();
+    }
+
+    public Users(String name, String email, String login, String password, int provider, OffsetDateTime termsAcceptedAt) {
+        this.uuid = java.util.UUID.randomUUID().toString();
+        this.name = name;
+        this.email = email;
+        this.login = login;
+        this.password = password;
+        this.provider = provider;
+        this.termsAcceptedAt = termsAcceptedAt;
+        this.role = Role.USER.getId();
     }
 
     public long getId() {
@@ -94,27 +114,60 @@ public class Users {
         this.login = login;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.role == Role.ADMIN.getId()) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return login == null ? email : login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public byte getRole() {
+    public int getRole() {
         return role;
     }
 
-    public void setRole(byte role) {
+    public void setRole(int role) {
         this.role = role;
     }
 
-    public byte getProvider() {
+    public int getProvider() {
         return provider;
     }
 
-    public void setProvider(byte provider) {
+    public void setProvider(int provider) {
         this.provider = provider;
     }
 
