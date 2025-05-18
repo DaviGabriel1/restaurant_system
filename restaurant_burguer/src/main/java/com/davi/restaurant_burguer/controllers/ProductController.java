@@ -2,9 +2,11 @@ package com.davi.restaurant_burguer.controllers;
 
 import com.davi.restaurant_burguer.dtos.products.RequestProductDTO;
 import com.davi.restaurant_burguer.dtos.products.ResponseProductDTO;
+import com.davi.restaurant_burguer.dtos.products.productImage.RequestProductImageDTO;
 import com.davi.restaurant_burguer.services.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -42,5 +44,12 @@ public class ProductController {
     public ResponseEntity deleteProduct(@PathVariable String uuid){
         this.productService.deleteProduct(uuid);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/upload/{productUuid}")
+    public ResponseEntity uploadProductImage(@RequestParam(required = false,defaultValue = "false") boolean isThumbnail,@PathVariable String productUuid, @RequestParam("file") MultipartFile file) throws Exception {
+        RequestProductImageDTO requestProductImageDTO = new RequestProductImageDTO(productUuid,file,isThumbnail);
+        this.productService.uploadProductImage(requestProductImageDTO);
+        return ResponseEntity.ok().build();
     }
 }
