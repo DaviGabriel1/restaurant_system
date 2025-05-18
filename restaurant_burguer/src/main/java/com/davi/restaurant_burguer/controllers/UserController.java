@@ -1,6 +1,7 @@
 package com.davi.restaurant_burguer.controllers;
 
 import com.davi.restaurant_burguer.dtos.users.ResponseUserDTO;
+import com.davi.restaurant_burguer.exceptions.NotfoundException;
 import com.davi.restaurant_burguer.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,9 @@ public class UserController {
     @GetMapping("{id}")
     public ResponseEntity<ResponseUserDTO> getUserById(@PathVariable long id){
         ResponseUserDTO responseUserDTO = this.userService.getUser(id);
+        if(responseUserDTO == null){
+            throw new NotfoundException("usuário não encontrado");
+        }
         return ResponseEntity.ok(responseUserDTO);
     }
 
