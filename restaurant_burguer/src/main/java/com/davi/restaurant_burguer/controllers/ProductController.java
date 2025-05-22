@@ -6,6 +6,7 @@ import com.davi.restaurant_burguer.dtos.products.productImage.RequestProductImag
 import com.davi.restaurant_burguer.exceptions.FileSizeException;
 import com.davi.restaurant_burguer.exceptions.InvalidTypeException;
 import com.davi.restaurant_burguer.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,13 +33,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseProductDTO> saveProduct(@RequestBody RequestProductDTO requestProductDTO){
+    public ResponseEntity<ResponseProductDTO> saveProduct(@RequestBody @Valid RequestProductDTO requestProductDTO){
         ResponseProductDTO productDTO = this.productService.saveProduct(requestProductDTO);
         return ResponseEntity.status(201).body(productDTO);
     }
 
     @PutMapping("{uuid}")
-    public ResponseEntity<ResponseProductDTO> updateProduct(@RequestBody RequestProductDTO requestProductDTO, @PathVariable String uuid){
+    public ResponseEntity<ResponseProductDTO> updateProduct(@RequestBody @Valid RequestProductDTO requestProductDTO, @PathVariable String uuid){
         return ResponseEntity.ok(this.productService.updateProduct(requestProductDTO, uuid));
     }
 

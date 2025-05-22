@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService implements UserDetailsService {
-    private UserService userService;
-    private TokenService tokenService;
-    private UserMapper userMapper;
+    private final UserService userService;
+    private final TokenService tokenService;
+    private final UserMapper userMapper;
 
     public AuthService(UserService userService,TokenService tokenService, UserMapper userMapper) {
         this.userService = userService;

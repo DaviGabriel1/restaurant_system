@@ -5,6 +5,7 @@ import com.davi.restaurant_burguer.dtos.auth.RequestRegisterDTO;
 import com.davi.restaurant_burguer.dtos.auth.ResponseLoginDTO;
 import com.davi.restaurant_burguer.dtos.auth.ResponseRegisterDTO;
 import com.davi.restaurant_burguer.services.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private AuthService authService;
-    private AuthenticationManager authenticationManager;
+    private final AuthService authService;
+    private final AuthenticationManager authenticationManager;
 
     public AuthController(AuthService authService, AuthenticationManager authenticationManager) {
         this.authService = authService;
@@ -26,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseRegisterDTO> register(@RequestBody RequestRegisterDTO requestRegisterDTO) {
+    public ResponseEntity<ResponseRegisterDTO> register(@RequestBody @Valid RequestRegisterDTO requestRegisterDTO) {
         ResponseRegisterDTO responseRegisterDTO = this.authService.register(requestRegisterDTO);
         if(responseRegisterDTO.status() != 201){
             return ResponseEntity.badRequest().body(responseRegisterDTO);
@@ -35,7 +36,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseLoginDTO> login(@RequestBody RequestLoginDTO requestLoginDTO) {
+    public ResponseEntity<ResponseLoginDTO> login(@RequestBody @Valid RequestLoginDTO requestLoginDTO) {
         var emailPassword = new UsernamePasswordAuthenticationToken(requestLoginDTO.login(),requestLoginDTO.password());
         Authentication auth = this.authenticationManager.authenticate(emailPassword);
         ResponseLoginDTO responseLoginDTO = this.authService.login(auth);
