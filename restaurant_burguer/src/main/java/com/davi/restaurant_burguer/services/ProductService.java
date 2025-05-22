@@ -22,6 +22,7 @@ public class ProductService {
     private final ProductImageRepository productImageRepository;
     private final ProductMapper productMapper;
     private final IStorageServiceAdapter storageServiceAdapter;
+    private static final String KEY_PRODUCT_IMAGE = "products-image/";
 
     public ProductService(ProductRepository productRepository,ProductImageRepository productImageRepository, ProductMapper productMapper, IStorageServiceAdapter storageServiceAdapter) {
         this.productRepository = productRepository;
@@ -77,7 +78,7 @@ public class ProductService {
 
         String fileName = product.getName().replaceAll(" ","_") + "_" + orders + "_" + requestProductImageDTO.uuid() + "_" + OffsetDateTime.now().toEpochSecond();
         String url = this.storageServiceAdapter
-                .uploadFile(requestProductImageDTO.file().getBytes(),fileName,requestProductImageDTO.file().getContentType());
+                .uploadFile(requestProductImageDTO.file().getBytes(),KEY_PRODUCT_IMAGE+fileName,requestProductImageDTO.file().getContentType());
         ProductImage image = new ProductImage(product,url, requestProductImageDTO.isThumbnail(), orders);
         this.productImageRepository.save(image);
     }

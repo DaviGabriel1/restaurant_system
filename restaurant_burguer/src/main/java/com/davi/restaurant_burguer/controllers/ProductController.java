@@ -3,6 +3,8 @@ package com.davi.restaurant_burguer.controllers;
 import com.davi.restaurant_burguer.dtos.products.RequestProductDTO;
 import com.davi.restaurant_burguer.dtos.products.ResponseProductDTO;
 import com.davi.restaurant_burguer.dtos.products.productImage.RequestProductImageDTO;
+import com.davi.restaurant_burguer.exceptions.FileSizeException;
+import com.davi.restaurant_burguer.exceptions.InvalidTypeException;
 import com.davi.restaurant_burguer.services.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +50,12 @@ public class ProductController {
 
     @PostMapping("/upload/{productUuid}")
     public ResponseEntity uploadProductImage(@RequestParam(required = false,defaultValue = "false") boolean isThumbnail,@PathVariable String productUuid, @RequestParam("file") MultipartFile file) throws Exception {
+        if(file.getSize() > 2 * 1024 * 1024){
+            throw new FileSizeException("O tamanho do arquivo deve ser menor que 2MB");
+        }
+        if(file.getContentType() == null || !file.getContentType().equals("image/jpeg") && !file.getContentType().equals("image/png")){
+            throw new InvalidTypeException("O arquivo deve ser uma imagem JPEG ou PNG");
+        }
         RequestProductImageDTO requestProductImageDTO = new RequestProductImageDTO(productUuid,file,isThumbnail);
         this.productService.uploadProductImage(requestProductImageDTO);
         return ResponseEntity.ok().build();

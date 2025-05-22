@@ -1,14 +1,11 @@
 package com.davi.restaurant_burguer.services;
 
-import com.davi.restaurant_burguer.dtos.auth.RequestLoginDTO;
 import com.davi.restaurant_burguer.dtos.auth.RequestRegisterDTO;
 import com.davi.restaurant_burguer.dtos.auth.ResponseLoginDTO;
 import com.davi.restaurant_burguer.dtos.auth.ResponseRegisterDTO;
 import com.davi.restaurant_burguer.infrastructure.security.TokenService;
 import com.davi.restaurant_burguer.mappers.UserMapper;
 import com.davi.restaurant_burguer.models.Users;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
