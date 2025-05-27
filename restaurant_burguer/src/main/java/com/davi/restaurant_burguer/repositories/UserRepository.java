@@ -17,5 +17,5 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     @Query("SELECT u FROM Users u WHERE u.id = ?1 AND u.deletedAt is null")
     Users findOne(long id);
 
-    Users findOneByLogin(String login);
+    Users findOneByPhone(String login);
 }

@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class Users implements UserDetails {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -27,26 +27,17 @@ public class Users implements UserDetails {
     @Column
     private String name;
 
-    @Column(unique = true)
-    private String email;
-
-    @Column(unique = true)
-    private String login;
-
-    @Column
-    private String password;
-
     @Column
     private int role;
 
-    @Column
-    private int provider;
-
-    @Column(name = "terms_accepted_at")
-    private OffsetDateTime termsAcceptedAt;
+    @Column(unique = true)
+    private String phone;
 
     @Column(name = "email_verified_at")
     private OffsetDateTime emailVerifiedAt;
+
+    @Column
+    private boolean isVerified;
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -60,18 +51,23 @@ public class Users implements UserDetails {
     private OffsetDateTime deletedAt;
 
     public Users() {
+
         this.uuid = java.util.UUID.randomUUID().toString();
+        this.isVerified = false;
     }
 
-    public Users(String name, String email, String login, String password, int provider, OffsetDateTime termsAcceptedAt) {
-        this.uuid = java.util.UUID.randomUUID().toString();
+    public Users(String name, int role, String phone) {
         this.name = name;
-        this.email = email;
-        this.login = login;
-        this.password = password;
-        this.provider = provider;
-        this.termsAcceptedAt = termsAcceptedAt;
-        this.role = Role.USER.getId();
+        this.role = role;
+        this.phone = phone;
+        this.isVerified = false;
+    }
+
+    public List<GrantedAuthority> getGrantedAuthorities() {
+        if(Role.fromByte(this.role) == Role.ADMIN){
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     public long getId() {
@@ -98,85 +94,12 @@ public class Users implements UserDetails {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == Role.ADMIN.getId()) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        }
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return login == null ? email : login;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public int getRole() {
         return role;
     }
 
     public void setRole(int role) {
         this.role = role;
-    }
-
-    public int getProvider() {
-        return provider;
-    }
-
-    public void setProvider(int provider) {
-        this.provider = provider;
-    }
-
-    public OffsetDateTime isTermsAcceptedAt() {
-        return termsAcceptedAt;
-    }
-
-    public void setTermsAcceptedAt(OffsetDateTime termsAcceptedAt) {
-        this.termsAcceptedAt = termsAcceptedAt;
     }
 
     public OffsetDateTime getEmailVerifiedAt() {
@@ -209,5 +132,21 @@ public class Users implements UserDetails {
 
     public void setDeletedAt(OffsetDateTime deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 }

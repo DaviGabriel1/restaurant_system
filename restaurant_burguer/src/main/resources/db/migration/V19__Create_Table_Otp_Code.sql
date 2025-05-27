@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS otp_code (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    phone VARCHAR(20) NOT NULL,
+    code VARCHAR(10) NOT NULL,
+    expires_at DATETIME,
+    active BOOLEAN DEFAULT true
+);

@@ -27,8 +27,8 @@ public class UserService {
         return userMapper.mapToResponseUserDTO(this.userRepository.findOne(id));
     }
 
-    public Users getUserByLogin(String login) {
-        return this.userRepository.findOneByLogin(login);
+    public Users getUserByPhone(String login) {
+        return this.userRepository.findOneByPhone(login);
     }
 
     public void saveUser(Users user) {
