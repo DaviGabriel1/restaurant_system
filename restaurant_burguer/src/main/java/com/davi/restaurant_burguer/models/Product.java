@@ -7,6 +7,8 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -30,6 +32,9 @@ public class Product {
 
     @Column(nullable = false)
     private int category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductImage> images = new ArrayList<>();
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -135,5 +140,13 @@ public class Product {
 
     public void setAvailable(boolean available) {
         isAvailable = available;
+    }
+
+    public List<ProductImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ProductImage> images) {
+        this.images = images;
     }
 }

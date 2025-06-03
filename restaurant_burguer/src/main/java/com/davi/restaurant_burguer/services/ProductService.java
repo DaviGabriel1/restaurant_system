@@ -10,9 +10,11 @@ import com.davi.restaurant_burguer.models.Product;
 import com.davi.restaurant_burguer.models.ProductImage;
 import com.davi.restaurant_burguer.repositories.ProductImageRepository;
 import com.davi.restaurant_burguer.repositories.ProductRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -38,7 +40,9 @@ public class ProductService {
         return this.productMapper.mapToResponseProductDTO(product);
     }
 
+    @Cacheable("products")
     public List<ResponseProductDTO> getAllProducts() {
+        System.out.println("cache");
         List<Product> products = this.productRepository.findAll();
         return this.productMapper.mapToResponseProductDTOList(products);
     }
@@ -74,6 +78,7 @@ public class ProductService {
             throw new NotfoundException("produto não encontrado");
         }
         List<ProductImage> allImages = this.productImageRepository.findAllByProductId(product.getId());
+        this.updateListWithoutThumbnail(allImages);
         int orders = allImages.size();
 
         String fileName = product.getName().replaceAll(" ","_") + "_" + orders + "_" + requestProductImageDTO.uuid() + "_" + OffsetDateTime.now().toEpochSecond();
@@ -83,11 +88,20 @@ public class ProductService {
         this.productImageRepository.save(image);
     }
 
+    private void updateListWithoutThumbnail(List<ProductImage> allImages) {
+        for(ProductImage img : allImages) {
+            if (img.isThumbnail()) {
+                img.setThumbnail(false);
+            }
+        }
+        this.productImageRepository.saveAll(allImages);
+    }
+
     private static Product editProduct(Product product, RequestProductDTO requestProductDTO){
         product.setName(requestProductDTO.name());
         product.setCategory(requestProductDTO.category());
         product.setDescription(requestProductDTO.description());
-        product.setPrice(requestProductDTO.price());
+        product.setPrice(new BigDecimal(requestProductDTO.price()));
         product.setAvailable(requestProductDTO.isAvailable());
         return product;
     }
