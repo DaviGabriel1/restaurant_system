@@ -1,5 +1,6 @@
 package com.davi.restaurant_burguer.controllers;
 
+import com.davi.restaurant_burguer.dtos.GenericResponseDTO;
 import com.davi.restaurant_burguer.dtos.products.RequestProductDTO;
 import com.davi.restaurant_burguer.dtos.products.ResponseProductDTO;
 import com.davi.restaurant_burguer.dtos.products.productImage.RequestProductImageDTO;
@@ -50,7 +51,7 @@ public class ProductController {
     }
 
     @PostMapping("/upload/{productUuid}")
-    public ResponseEntity uploadProductImage(@RequestParam(required = false,defaultValue = "false") boolean isThumbnail,@PathVariable String productUuid, @RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseEntity<GenericResponseDTO> uploadProductImage(@RequestParam(required = false,defaultValue = "false") boolean isThumbnail, @PathVariable String productUuid, @RequestParam("file") MultipartFile file) throws Exception {
         if(file.getSize() > 2 * 1024 * 1024){
             throw new FileSizeException("O tamanho do arquivo deve ser menor que 2MB");
         }
@@ -59,6 +60,6 @@ public class ProductController {
         }
         RequestProductImageDTO requestProductImageDTO = new RequestProductImageDTO(productUuid,file,isThumbnail);
         this.productService.uploadProductImage(requestProductImageDTO);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(201).body(new GenericResponseDTO("imagem adicionada com sucesso!"));
     }
 }

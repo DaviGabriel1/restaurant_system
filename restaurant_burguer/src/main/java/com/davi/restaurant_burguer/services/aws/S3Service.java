@@ -1,4 +1,4 @@
-package com.davi.restaurant_burguer.services;
+package com.davi.restaurant_burguer.services.aws;
 
 import com.davi.restaurant_burguer.interfaces.IStorageServiceAdapter;
 import org.springframework.beans.factory.annotation.Value;
