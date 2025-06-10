@@ -3,6 +3,8 @@ package com.davi.restaurant_burguer.controllers;
 import com.davi.restaurant_burguer.dtos.GenericResponseDTO;
 import com.davi.restaurant_burguer.dtos.products.RequestProductDTO;
 import com.davi.restaurant_burguer.dtos.products.ResponseProductDTO;
+import com.davi.restaurant_burguer.dtos.products.additional.RequestProductAdditionalDTO;
+import com.davi.restaurant_burguer.dtos.products.additional.ResponseProductAdditionalDTO;
 import com.davi.restaurant_burguer.dtos.products.productImage.RequestProductImageDTO;
 import com.davi.restaurant_burguer.exceptions.FileSizeException;
 import com.davi.restaurant_burguer.exceptions.InvalidTypeException;
@@ -62,4 +64,35 @@ public class ProductController {
         this.productService.uploadProductImage(requestProductImageDTO);
         return ResponseEntity.status(201).body(new GenericResponseDTO("imagem adicionada com sucesso!"));
     }
+
+    @PostMapping("/additional/{productUuid}")
+    public ResponseEntity<GenericResponseDTO> saveProductAdditional(@PathVariable String productUuid, @RequestBody RequestProductAdditionalDTO productAdditional) {
+        this.productService.saveAdditional(productUuid,productAdditional);
+        return ResponseEntity.status(201).body(new GenericResponseDTO("adicional de produto criado com sucesso!"));
+    }
+
+    @GetMapping("additional/find-one/{productAdditionalId}")
+    public ResponseEntity<ResponseProductAdditionalDTO> findOneProductAdditional(@PathVariable Long productAdditionalId) {
+        ResponseProductAdditionalDTO responseProductAdditionalDTO = this.productService.findOneProductAdditional(productAdditionalId);
+        return ResponseEntity.status(200).body(responseProductAdditionalDTO);
+    }
+
+    @GetMapping("additional/find-all/{productUuid}")
+    public ResponseEntity<List<ResponseProductAdditionalDTO>> findAllProductAdditional(@PathVariable String productUuid ) {
+        List<ResponseProductAdditionalDTO> responseProductAdditionalDTO = this.productService.findAllProductAdditional(productUuid);
+        return ResponseEntity.status(200).body(responseProductAdditionalDTO);
+    }
+
+    @PutMapping("/additional/{additionalId}")
+    public ResponseEntity<ResponseProductAdditionalDTO> updateProductAdditional(@PathVariable Long additionalId, @RequestBody RequestProductAdditionalDTO requestProductAdditionalDTO) {
+        ResponseProductAdditionalDTO responseProductAdditionalDTO = this.productService.updateProductAdditional(additionalId,requestProductAdditionalDTO);
+        return ResponseEntity.status(200).body(responseProductAdditionalDTO);
+    }
+
+    @DeleteMapping("/additional/{additionalId}")
+    public ResponseEntity deleteProductAdditional(@PathVariable Long additionalId) {
+        this.productService.deleteProductAdditional(additionalId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
