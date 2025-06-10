@@ -1,0 +1,2 @@
+INSERT INTO `order` (`id`, `uuid`, `user_id`, `address_id`, `waiting_time`, `status`, `payment_status`, `payment_date`, `observation`, `delivery_fee`, `total_price`, `is_confirmed`, `payment_method`, `delivery_type`, `change_for`, `created_at`, `updated_at`, `deleted_at`) VALUES
+    (1, 'cd0da2f4-327e-11f0-a6b4-b37d59495f03', 1, 1, '00:50:00', 1, 1, '2025-05-16 17:53:09', 'sem cebola', 5.99, 59.90, 1, 1, 0, NULL, '2025-05-16 17:54:23', '2025-05-16 17:54:23', NULL);
