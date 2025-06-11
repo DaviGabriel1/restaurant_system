@@ -1,5 +1,20 @@
 name: cicd
 
+env:
+  APP_SECRET: ${{secrets.APP_SECRET}}
+  APP_TOKEN_EXPIRATION: ${{secrets.APP_TOKEN_EXPIRATION}}
+  AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+  AWS_S3_BUCKET: ${{secrets.AWS_S3_BUCKET}}
+  AWS_S3_REGION: ${{secrets.AWS_S3_REGION}}
+  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+  AWS_SNS_ORDERS-EMIT-GROUP-ID: ${{secrets.AWS_SNS_ORDERS-EMIT-GROUP-ID}}
+  AWS_SNS_SEND_SMS_ARN: ${{secrets.AWS_SNS_SEND_SMS_ARN}}
+  AWS_SNS_TOPIC_ORDERS_EMIT: ${{secrets.AWS_SNS_TOPIC_ORDERS_EMIT}}
+  DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+  DB_URL: ${{secrets.DB_URL}}
+  DB_USERNAME: ${{secrets.DB_USERNAME}}
+
+
 on:
   push:
     branches: [homolog]
