@@ -149,4 +149,21 @@ public class Users {
     public void setVerified(boolean verified) {
         isVerified = verified;
     }
+
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id=" + id +
+                ", uuid='" + uuid + '\'' +
+                ", name='" + name + '\'' +
+                ", role=" + role +
+                ", phone='" + phone + '\'' +
+                ", emailVerifiedAt=" + emailVerifiedAt +
+                ", isVerified=" + isVerified +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", deletedAt=" + deletedAt +
+                '}';
+    }
 }

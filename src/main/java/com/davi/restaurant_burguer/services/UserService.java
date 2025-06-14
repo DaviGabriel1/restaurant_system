@@ -27,6 +27,10 @@ public class UserService {
         return userMapper.mapToResponseUserDTO(this.userRepository.findOne(id));
     }
 
+    public Users getUserById(Long id) {
+        return this.userRepository.getUsersById(id);
+    }
+
     public Users getUserByPhone(String login) {
         return this.userRepository.findOneByPhone(login);
     }

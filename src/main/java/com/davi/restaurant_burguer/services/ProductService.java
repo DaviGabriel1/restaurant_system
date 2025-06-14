@@ -45,10 +45,17 @@ public class ProductService {
     }
 
     @Cacheable("products")
-    public List<ResponseProductDTO> getAllProducts() {
-        System.out.println("cache");
+    public List<ResponseProductDTO> getAllProductsCacheable() {
         List<Product> products = this.productRepository.findAll();
         return this.productMapper.mapToResponseProductDTOList(products);
+    }
+
+    public List<Product> getAllProducts() {
+        return this.productRepository.findAll();
+    }
+
+    public List<Product> getByIdIn(List<Long> ids) {
+        return this.productRepository.findByIdIn(ids).orElseThrow(() -> new NotfoundException("produto não encontrado"));
     }
 
     public ResponseProductDTO saveProduct(RequestProductDTO requestProductDTO){
@@ -106,7 +113,7 @@ public class ProductService {
 
     public List<ResponseProductAdditionalDTO> findAllProductAdditional(String productUuid) {
         Product product = this.productRepository.getByUuid(productUuid);
-        return this.additionalService.findAll(product.getId());
+        return this.additionalService.findAllByProductId(product.getId());
     }
 
     public void deleteProductAdditional(Long productAdditional) {

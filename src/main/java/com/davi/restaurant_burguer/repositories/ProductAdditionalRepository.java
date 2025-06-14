@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -16,4 +17,6 @@ public interface ProductAdditionalRepository extends JpaRepository<ProductAdditi
 
     @Query("SELECT pa from ProductAdditional pa where pa.id = ?1 and pa.deletedAt is null")
     ProductAdditional findOne(Long productAdditionalId);
+
+    List<ProductAdditional> findProductAdditionalByIdIn(Collection<Long> ids);
 }

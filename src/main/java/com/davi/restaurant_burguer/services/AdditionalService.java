@@ -23,7 +23,7 @@ public class AdditionalService {
         this.productAdditionalMapper = productAdditionalMapper;
     }
 
-    public List<ResponseProductAdditionalDTO> findAll(Long productId) {
+    public List<ResponseProductAdditionalDTO> findAllByProductId(Long productId) {
         List<ProductAdditional> productAdditional = this.productAdditionalRepository.findAll(productId);
         return this.productAdditionalMapper.mapListToDTO(productAdditional);
     }
@@ -31,6 +31,14 @@ public class AdditionalService {
     public ResponseProductAdditionalDTO findOne(Long additionalId) {
         ProductAdditional productAdditional = this.productAdditionalRepository.findOne(additionalId);
         return this.productAdditionalMapper.mapToDTO(productAdditional);
+    }
+
+    public List<ProductAdditional> findProductAdditionalInId(List<Long> ids) {
+        return this.productAdditionalRepository.findProductAdditionalByIdIn(ids);
+    }
+
+    public List<ProductAdditional> findAll() {
+        return this.productAdditionalRepository.findAll();
     }
 
     public void saveProductAdditional(Product product, RequestProductAdditionalDTO productAdditionalDTO) {

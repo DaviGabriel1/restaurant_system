@@ -32,7 +32,7 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ResponseProductDTO>> getAllProducts(){
-        return ResponseEntity.ok(this.productService.getAllProducts());
+        return ResponseEntity.ok(this.productService.getAllProductsCacheable());
     }
 
     @PostMapping

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `product` (
     `id` bigint NOT NULL AUTO_INCREMENT,
-    `uuid` char(35) DEFAULT (uuid()),
+    `uuid` char(36) DEFAULT (uuid()),
     `name` varchar(255) NOT NULL,
     `description` text,
     `price` decimal(10,2) NOT NULL,

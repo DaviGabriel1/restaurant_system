@@ -9,6 +9,15 @@ public enum PaymentMethod {
         this.id = id;
     }
 
+    public static PaymentMethod fromCode(int code) {
+        for(PaymentMethod paymentMethod : PaymentMethod.values()) {
+            if(paymentMethod.id == code){
+                return paymentMethod;
+            }
+        }
+        throw new IllegalArgumentException("método de pagamento inválido");
+    }
+
     public int getId() {
         return id;
     }
