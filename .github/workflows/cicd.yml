@@ -44,6 +44,8 @@ jobs:
     steps:
       - name: pull image from docker hub
         run: docker pull davi150205/restaurant_system:latest
+      - name: Delete old container
+        run: docker rm -f restaurant_system_container
       - name: Run docker container
         run: |
           docker run -d -p 8000:8000 \
@@ -59,3 +61,8 @@ jobs:
             -e DB_URL=${{ secrets.DB_URL }} \
             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
             --name restaurant_system_container davi150205/restaurant_system
+      - name: Print container logs
+        run: docker logs restaurant_system_container || true
+      - name: Check if container is running
+        run: docker ps
+
