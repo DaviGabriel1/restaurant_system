@@ -26,7 +26,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<GenericResponseDTO> generateOrder(@RequestBody @Valid RequestOrdersDTO ordersDto) {
         Long orderId = this.orderService.generateOrder(ordersDto);
-        this.snsService.publish(new MessageDTO(orderId.toString())); //TODO: enviar a comanda inteira para o SQS
+        this.snsService.publish(new MessageDTO(orderId.toString())); //TODO: enviar a comanda inteira para o SQS através do toString()
         return ResponseEntity.status(201).body(new GenericResponseDTO("mensagem enviada para o SQS"));
     }
 }
