@@ -44,8 +44,6 @@ jobs:
     steps:
       - name: pull image from docker hub
         run: docker pull davi150205/restaurant_system:latest
-      - name: Delete old container
-        run: docker rm -f restaurant_system_container
       - name: Run docker container
         run: |
           docker run -d -p 8000:8000 \
