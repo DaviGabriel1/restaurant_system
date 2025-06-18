@@ -34,7 +34,7 @@ jobs:
       - name: Login to docker hub
         run: docker login -u ${{secrets.DOCKER_HUB_LOGIN}} -p ${{secrets.DOCKER_HUB_PASSWORD}}
       - name: build docker image
-        run: docker build -t davi150205/restaurant_system .
+        run: docker build -t davi150205/restaurant_system:latest .
       - name: Push image to Docker Hub
         run: docker push davi150205/restaurant_system:latest
 
