@@ -1,18 +1,17 @@
 name: cicd
 
 env:
-  APP_SECRET: ${{secrets.APP_SECRET}}
-  APP_TOKEN_EXPIRATION: ${{secrets.APP_TOKEN_EXPIRATION}}
-  AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
-  AWS_S3_BUCKET: ${{secrets.AWS_S3_BUCKET}}
-  AWS_S3_REGION: ${{secrets.AWS_S3_REGION}}
-  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-  AWS_SNS_SEND_SMS_ARN: ${{secrets.AWS_SNS_SEND_SMS_ARN}}
-  AWS_SNS_TOPIC_ORDERS_EMIT: ${{secrets.AWS_SNS_TOPIC_ORDERS_EMIT}}
-  DB_PASSWORD: ${{secrets.DB_PASSWORD}}
-  DB_URL: ${{secrets.DB_URL}}
-  DB_USERNAME: ${{secrets.DB_USERNAME}}
-
+  APP_SECRET: ${{ secrets.APP_SECRET }}
+  APP_TOKEN_EXPIRATION: ${{ secrets.APP_TOKEN_EXPIRATION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+  AWS_S3_REGION: ${{ secrets.AWS_S3_REGION }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_SNS_SEND_SMS_ARN: ${{ secrets.AWS_SNS_SEND_SMS_ARN }}
+  AWS_SNS_TOPIC_ORDERS_EMIT: ${{ secrets.AWS_SNS_TOPIC_ORDERS_EMIT }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_URL: ${{ secrets.DB_URL }}
+  DB_USERNAME: ${{ secrets.DB_USERNAME }}
 
 on:
   push:
@@ -20,34 +19,34 @@ on:
 
 jobs:
   build:
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
-      - name: checkout source
+      - name: Checkout source
         uses: actions/checkout@v3
-      - name: Setup java
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
       - name: Build Project
         run: mvn clean install -DskipTests
-      - name: Login to docker hub
-        run: docker login -u ${{secrets.DOCKER_HUB_LOGIN}} -p ${{secrets.DOCKER_HUB_PASSWORD}}
-      - name: build docker image
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_HUB_LOGIN }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Build Docker image
         run: docker build -t davi150205/restaurant_system:latest .
       - name: Push image to Docker Hub
         run: docker push davi150205/restaurant_system:latest
 
   deploy:
     needs: build
-    runs-on: [self-hosted]
+    runs-on: self-hosted
     steps:
-      - name: Login to docker hub
-        run: docker login -u ${{secrets.DOCKER_HUB_LOGIN}} -p ${{secrets.DOCKER_HUB_PASSWORD}}
-      - name: pull image from docker hub
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_HUB_LOGIN }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Pull image from Docker Hub
         run: docker pull davi150205/restaurant_system:latest
       - name: Delete old container
-        run: docker rm -f restaurant_system_container
+        run: docker rm -f restaurant_system_container || true
       - name: Run docker container
         run: |
           docker run -d -p 8000:8000 \
@@ -62,9 +61,8 @@ jobs:
             -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
             -e DB_URL=${{ secrets.DB_URL }} \
             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
-            --name restaurant_system_container davi150205/restaurant_system
+            --name restaurant_system_container davi150205/restaurant_system:latest
       - name: Print container logs
         run: docker logs restaurant_system_container || true
       - name: Check if container is running
         run: docker ps
-
