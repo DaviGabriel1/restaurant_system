@@ -40,7 +40,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: [restaurant-system-ec2]
+    runs-on: [self-hosted]
     steps:
       - name: pull image from docker hub
         run: docker pull davi150205/restaurant_system:latest
