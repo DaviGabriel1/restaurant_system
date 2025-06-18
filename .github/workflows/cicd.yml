@@ -42,6 +42,8 @@ jobs:
     needs: build
     runs-on: [self-hosted]
     steps:
+      - name: Login to docker hub
+        run: docker login -u ${{secrets.DOCKER_HUB_LOGIN}} -p ${{secrets.DOCKER_HUB_PASSWORD}}
       - name: pull image from docker hub
         run: docker pull davi150205/restaurant_system:latest
       - name: Delete old container
