@@ -62,7 +62,3 @@ jobs:
           -e DB_URL=${{ secrets.DB_URL }} \
           -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
           --name restaurant_system_container davi150205/restaurant_system:latest
-      - name: Print container logs
-        run: docker logs restaurant_system_container || true
-      - name: Check if container is running
-        run: docker ps
