@@ -26,12 +26,13 @@ class UserRepositoryTest {
     @Test
     @DisplayName("should return User successfully from DB")
     void findOneByPhoneCase1() {
-        String phone = "+5511999999999";
+        String phone = "+5511999999999"; //ARRANGE
         Users user = new Users("test1",1,phone);
         this.createUser(user);
-        Users result = this.userRepository.findOneByPhone(phone);
 
-        assertThat(result != null).isTrue();
+        Users result = this.userRepository.findOneByPhone(phone); //ACT
+
+        assertThat(result != null).isTrue(); //ASSERT
     }
 
     @Test
@@ -43,20 +44,20 @@ class UserRepositoryTest {
         assertThat(result == null).isTrue();
     }
 
-    private void createUser(Users user) {
-        this.entityManager.persist(user);
-    }
+    @Test
+    @DisplayName("should return a user by Id")
+    void findOneByUserIdCase1() {
+        Users user = returnATestUser();
+        this.createUser(user);
+        Users userReturned = this.userRepository.findOne(user.getId());
 
-    private void createManyUsers(List<Users> users) {
-        for(Users u : users) {
-            this.entityManager.persist(u);
-        }
+        assertThat(userReturned != null).isTrue();
     }
 
     @Test
     @DisplayName("Should return a User")
     void findOneCase1() {
-        Users user = new Users("Test user",1,"+5511999999999");
+        Users user = returnATestUser();
         this.createUser(user);
         Users userReturned = this.userRepository.findOne(user.getId());
 
@@ -84,7 +85,7 @@ class UserRepositoryTest {
     @Test
     @DisplayName("should return all users if deletedAt is null")
     public void findAllCase1() {
-        Users deletedUser = new Users("Deleted user test 1", 1, "+5511999999995");
+        Users deletedUser = new Users("Deleted user test 1", 1, "+5511999999995"); //ARRANGE
         deletedUser.setDeletedAt(OffsetDateTime.now());
         List<Users> users = new ArrayList<>(List.of(
                 new Users("User test 1", 1, "+5511999999999"),
@@ -94,16 +95,32 @@ class UserRepositoryTest {
                 deletedUser
         ));
         this.createManyUsers(users);
-        List<Users> usersReturned = this.userRepository.findAll();
 
-        assertThat(usersReturned.size()).isEqualTo(4);
+        List<Users> usersReturned = this.userRepository.findAll(); //ACT
+
+        assertThat(usersReturned.size()).isEqualTo(4); //ASSERT
     }
 
     @Test
     @DisplayName("should return null case the table is empty")
     public void findAllCase2() {
         List<Users> usersReturned = this.userRepository.findAll();
-
         assertThat(usersReturned).hasSize(0);
     }
+
+    private void createUser(Users user) {
+        this.entityManager.persist(user);
+    }
+
+    private void createManyUsers(List<Users> users) {
+        for(Users u : users) {
+            this.entityManager.persist(u);
+        }
+    }
+
+    private static Users returnATestUser() {
+        return new Users("Test user",1,"+5511999999999");
+    }
+
+
 }
