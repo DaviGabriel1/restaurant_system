@@ -121,6 +121,4 @@ class UserRepositoryTest {
     private static Users returnATestUser() {
         return new Users("Test user",1,"+5511999999999");
     }
-
-
 }

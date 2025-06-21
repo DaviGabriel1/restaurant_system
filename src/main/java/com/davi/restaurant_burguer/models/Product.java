@@ -62,6 +62,20 @@ public class Product {
         this.category = category;
     }
 
+    public Product(Long id, String uuid, String name, String description, BigDecimal price, int category, List<ProductImage> images, OffsetDateTime createdAt, OffsetDateTime updatedAt, OffsetDateTime deletedAt, boolean isAvailable) {
+        this.id = id;
+        this.uuid = uuid;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.images = images;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.isAvailable = isAvailable;
+    }
+
     public Long getId() {
         return id;
     }
