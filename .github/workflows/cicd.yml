@@ -18,7 +18,23 @@ on:
     branches: [homolog]
 
 jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Run tests
+        run: mvn test
+
   build:
+    needs: [tests]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -38,7 +54,7 @@ jobs:
         run: docker push davi150205/restaurant_system:latest
 
   deploy:
-    needs: build
+    needs: [build]
     runs-on: self-hosted
     steps:
       - name: Login to Docker Hub
@@ -49,4 +65,8 @@ jobs:
         run: docker rm -f restaurant_system_container || true
       - name: Run docker container
         run: |
-          docker run -d -p 8000:8000 --name restaurant_system_container davi150205/restaurant_system:latest
+          docker run -d \
+          -p 8000:8000 \
+          --name restaurant_system_container \
+          --env-file <(env | grep -E 'APP_|AWS_|DB_') \
+          davi150205/restaurant_system:latest
