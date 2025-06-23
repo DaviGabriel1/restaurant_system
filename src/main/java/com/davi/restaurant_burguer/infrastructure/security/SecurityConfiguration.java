@@ -1,5 +1,7 @@
 package com.davi.restaurant_burguer.infrastructure.security;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,9 +17,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@SecurityScheme(name = SecurityConfiguration.SECURITY, type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 public class SecurityConfiguration {
     private final SecurityFilter securityFilter;
     private final PhoneCodeAuthenticationProvider phoneCodeAuthenticationProvider;
+
+    public static final String SECURITY = "bearerToken";
+
+    private static final String[] AUTH_WHITE_LIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/v2/api-docs/**",
+            "/swagger-resources/**"
+    };
 
     public SecurityConfiguration(SecurityFilter securityFilter, PhoneCodeAuthenticationProvider phoneCodeAuthenticationProvider) {
         this.securityFilter = securityFilter;
@@ -29,9 +41,11 @@ public class SecurityConfiguration {
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth/resend-code").permitAll()
+                        .requestMatchers(AUTH_WHITE_LIST).permitAll()
                         .requestMatchers(HttpMethod.POST,"/users").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
