@@ -10,6 +10,7 @@ import com.davi.restaurant_burguer.services.OrderService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,14 @@ public class OrderController implements OrderControllerDocs {
         this.orderService = orderService;
     }
 
-    @PostMapping
+    @PostMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<GenericResponseDTO> generateOrder(@RequestBody @Valid RequestOrdersDTO ordersDto) {
         Long orderId = this.orderService.generateOrder(ordersDto);

@@ -14,6 +14,7 @@ import com.davi.restaurant_burguer.services.ProductService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,39 +32,81 @@ public class ProductController implements ProductControllerDocs {
         this.productService = productService;
     }
 
-    @GetMapping("{uuid}")
+    @GetMapping(value = "{uuid}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<ResponseProductDTO> getProductByUuid(@PathVariable String uuid){
         return ResponseEntity.ok(this.productService.getProductByUuid(uuid));
     }
 
-    @GetMapping
+    @GetMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<List<ResponseProductDTO>> getAllProducts(){
         return ResponseEntity.ok(this.productService.getAllProductsCacheable());
     }
 
-    @PostMapping
+    @PostMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<ResponseProductDTO> saveProduct(@RequestBody @Valid RequestProductDTO requestProductDTO){
         ResponseProductDTO productDTO = this.productService.saveProduct(requestProductDTO);
         return ResponseEntity.status(201).body(productDTO);
     }
 
-    @PutMapping("{uuid}")
+    @PutMapping(value = "{uuid}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<ResponseProductDTO> updateProduct(@RequestBody @Valid RequestProductDTO requestProductDTO, @PathVariable String uuid){
         return ResponseEntity.ok(this.productService.updateProduct(requestProductDTO, uuid));
     }
 
-    @DeleteMapping("{uuid}")
+    @DeleteMapping(value = "{uuid}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity deleteProduct(@PathVariable String uuid){
         this.productService.deleteProduct(uuid);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/upload/{productUuid}")
+    @PostMapping(value = "/upload/{productUuid}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<GenericResponseDTO> uploadProductImage(@RequestParam(required = false, defaultValue = "false") boolean isThumbnail, @PathVariable String productUuid, @RequestParam("file") MultipartFile file) throws Exception {
         if(file.getSize() > 2 * 1024 * 1024){
@@ -77,35 +120,70 @@ public class ProductController implements ProductControllerDocs {
         return ResponseEntity.status(201).body(new GenericResponseDTO("imagem adicionada com sucesso!"));
     }
 
-    @PostMapping("/additional/{productUuid}")
+    @PostMapping(value = "/additional/{productUuid}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<GenericResponseDTO> saveProductAdditional(@PathVariable String productUuid, @RequestBody RequestProductAdditionalDTO productAdditional) {
         this.productService.saveAdditional(productUuid,productAdditional);
         return ResponseEntity.status(201).body(new GenericResponseDTO("adicional de produto criado com sucesso!"));
     }
 
-    @GetMapping("additional/find-one/{productAdditionalId}")
+    @GetMapping(value = "additional/find-one/{productAdditionalId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<ResponseProductAdditionalDTO> findOneProductAdditional(@PathVariable Long productAdditionalId) {
         ResponseProductAdditionalDTO responseProductAdditionalDTO = this.productService.findOneProductAdditional(productAdditionalId);
         return ResponseEntity.status(200).body(responseProductAdditionalDTO);
     }
 
-    @GetMapping("additional/find-all/{productUuid}")
+    @GetMapping(value = "additional/find-all/{productUuid}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<List<ResponseProductAdditionalDTO>> findAllProductAdditional(@PathVariable String productUuid) {
         List<ResponseProductAdditionalDTO> responseProductAdditionalDTO = this.productService.findAllProductAdditional(productUuid);
         return ResponseEntity.status(200).body(responseProductAdditionalDTO);
     }
 
-    @PutMapping("/additional/{additionalId}")
+    @PutMapping(value = "/additional/{additionalId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<ResponseProductAdditionalDTO> updateProductAdditional(@PathVariable Long additionalId, @RequestBody RequestProductAdditionalDTO requestProductAdditionalDTO) {
         ResponseProductAdditionalDTO responseProductAdditionalDTO = this.productService.updateProductAdditional(additionalId,requestProductAdditionalDTO);
         return ResponseEntity.status(200).body(responseProductAdditionalDTO);
     }
 
-    @DeleteMapping("/additional/{additionalId}")
+    @DeleteMapping(value = "/additional/{additionalId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity deleteProductAdditional(@PathVariable Long additionalId) {
         this.productService.deleteProductAdditional(additionalId);

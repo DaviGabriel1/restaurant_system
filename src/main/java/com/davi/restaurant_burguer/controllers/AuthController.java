@@ -1,5 +1,6 @@
 package com.davi.restaurant_burguer.controllers;
 
+import com.davi.restaurant_burguer.controllers.docs.AuthControllerDocs;
 import com.davi.restaurant_burguer.dtos.GenericResponseDTO;
 import com.davi.restaurant_burguer.dtos.auth.*;
 import com.davi.restaurant_burguer.dtos.products.ResponseProductDTO;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -26,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "Auth", description = "controller de autenticação/autorização")
-public class AuthController implements com.davi.restaurant_burguer.controllers.docs.AuthControllerDocs {
+public class AuthController implements AuthControllerDocs {
     private final AuthService authService;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
@@ -37,19 +39,13 @@ public class AuthController implements com.davi.restaurant_burguer.controllers.d
         this.authenticationManager = authenticationManager;
     }
 
-    @PostMapping("/register")
-    @Operation(summary = "registra um usuário",
-            description = "salva o usuário de forma inativa, após isso é enviado um SMS para entrar na conta",
-            tags = {"Auth"},
-            responses = {
-                    @ApiResponse(
-                            description = "Created",
-                            responseCode = "201",
-                            content = @Content(schema = @Schema(implementation = ResponseProductDTO.class))
-                    ),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content),
-            }
+    @PostMapping(value ="/register",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
     )
     @Override
     public ResponseEntity<ResponseRegisterDTO> register(@RequestBody @Valid RequestRegisterDTO requestRegisterDTO) {
@@ -60,19 +56,13 @@ public class AuthController implements com.davi.restaurant_burguer.controllers.d
         return ResponseEntity.status(responseRegisterDTO.status()).body(responseRegisterDTO);
     }
 
-    @PostMapping("/login")
-    @Operation(summary = "entrar na conta de um usuário",
-            description = "entrar na conta com base no código enviado via SMS",
-            tags = {"Auth"},
-            responses = {
-                    @ApiResponse(
-                            description = "Success",
-                            responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = ResponseProductDTO.class))
-                    ),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content),
-            }
+    @PostMapping(value = "/login",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
     )
     @Override
     public ResponseEntity<ResponseLoginDTO> login(@RequestBody @Valid RequestLoginDTO requestLoginDTO) {
@@ -85,19 +75,13 @@ public class AuthController implements com.davi.restaurant_burguer.controllers.d
         return ResponseEntity.ok(responseLoginDTO);
     }
 
-    @PostMapping("/resend-code")
-    @Operation(summary = "reenvia o código",
-            description = "envia um novo código via SMS para entrar na conta",
-            tags = {"Auth"},
-            responses = {
-                    @ApiResponse(
-                            description = "Success",
-                            responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = ResponseProductDTO.class))
-                    ),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content),
-            }
+    @PostMapping(value = "/resend-code",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
     )
     @Override
     public ResponseEntity<GenericResponseDTO> resendCode(@RequestBody @Valid RequestResendCode requestResendCode) {

@@ -7,6 +7,7 @@ import com.davi.restaurant_burguer.infrastructure.security.SecurityConfiguration
 import com.davi.restaurant_burguer.services.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,14 @@ public class UserController implements UserControllerDocs {
         this.userService = userService;
     }
 
-    @GetMapping("{id}")
+    @GetMapping(value = "{id}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<ResponseUserDTO> getUserById(@PathVariable long id){
         ResponseUserDTO responseUserDTO = this.userService.getUser(id);
@@ -36,7 +44,14 @@ public class UserController implements UserControllerDocs {
         return ResponseEntity.ok(responseUserDTO);
     }
 
-    @GetMapping
+    @GetMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
+    )
     @Override
     public ResponseEntity<List<ResponseUserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
