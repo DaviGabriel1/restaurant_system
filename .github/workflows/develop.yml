@@ -12,9 +12,14 @@ permissions:
 jobs:
   terraform:
     uses: ./.github/workflows/terraform.yml
+    secrets:
+      AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_ASSUME_ROLE_ARN }}
+      AWS_LOCK_DYNAMODB_TABLE: ${{ secrets.AWS_LOCK_DYNAMODB_TABLE }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_STATEFILE_S3_BUCKET: ${{ secrets.AWS_STATEFILE_S3_BUCKET }}
     with:
-      aws-assume-role-arn: ${{ secrets.AWS_ASSUME_ROLE_ARN}}
-      aws-lock-dynamodb-table: ${{ secrets.AWS_LOCK_DYNAMODB_TABLE}}
-      aws-region: ${{ secrets.AWS_REGION}}
-      aws-statefile-s3-bucket: ${{ secrets.AWS_STATEFILE_S3_BUCKET}}
-      enviroment: 'dev'
+      aws-assume-role-arn: AWS_ASSUME_ROLE_ARN
+      aws-lock-dynamodb-table: AWS_LOCK_DYNAMODB_TABLE
+      aws-region: AWS_REGION
+      aws-statefile-s3-bucket: AWS_STATEFILE_S3_BUCKET
+      environment: 'dev'

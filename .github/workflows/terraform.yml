@@ -2,6 +2,15 @@ name: "terraform Workflow"
 
 on:
   workflow_call:
+    secrets:
+      AWS_ASSUME_ROLE_ARN:
+        required: true
+      AWS_LOCK_DYNAMODB_TABLE:
+        required: true
+      AWS_REGION:
+        required: true
+      AWS_STATEFILE_S3_BUCKET:
+        required: true
     inputs:
       environment:
         type: string
