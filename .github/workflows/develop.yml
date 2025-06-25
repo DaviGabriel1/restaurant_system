@@ -20,6 +20,6 @@ jobs:
     with:
       aws-assume-role-arn: AWS_ASSUME_ROLE_ARN
       aws-lock-dynamodb-table: AWS_LOCK_DYNAMODB_TABLE
-      aws-region: AWS_REGION
+      aws-region: 'us-east-2'
       aws-statefile-s3-bucket: AWS_STATEFILE_S3_BUCKET
       environment: 'dev'
